@@ -1,0 +1,35 @@
+import os
+import subprocess
+
+# Define the directory containing APK files and the output directory for LiteRadar results
+apk_directory = 'path/to/apk/files'  # Replace with the actual directory of APK files
+output_directory = 'path/to/output'  # Replace with where you want results saved
+
+# Ensure output directory exists
+os.makedirs(output_directory, exist_ok=True)
+
+# Iterate over each APK file in the directory
+for apk_file in os.listdir(apk_directory):
+    if apk_file.endswith(".apk"):
+        # Full path to the APK file
+        apk_path = os.path.join(apk_directory, apk_file)
+        
+        # Define the output file for LiteRadar's results
+        output_file = os.path.join(output_directory, f"{apk_file}_literate.txt")
+        
+        # Run LiteRadar command on the APK file
+        # This assumes LiteRadar is run via a command line interface
+        try:
+            subprocess.run([
+                'literate',      # Assuming 'literate' is the LiteRadar command
+                '--apk', apk_path,
+                '--output', output_file
+            ], check=True)
+            
+            print(f"Successfully processed: {apk_file}")
+        
+        except subprocess.CalledProcessError as e:
+            print(f"Error processing {apk_file}: {e}")
+
+print("Batch processing completed.")
+
